@@ -10,7 +10,6 @@ internal static class RunSingleSpin
     internal static void Run()
     {
         var gameToSpin = ConfigurationManager.AppSettings["GameToSpin"] ?? DefaultGameToSpin;
-
         switch (gameToSpin.ToLower())
         {
             case "dice":
@@ -31,8 +30,8 @@ internal static class RunSingleSpin
     private static void SpinDice()
     {
         var algorithm = ConfigureApplication.CreateAlgorithm();
-        DiceReverseEngineer diceEngineer = new DiceReverseEngineer(algorithm: algorithm);
-        double diceRoll = diceEngineer.GetDiceRoll();
+        var diceEngineer = new DiceReverseEngineer(algorithm: algorithm);
+        var diceRoll = diceEngineer.GetDiceRoll();
         Console.WriteLine($"Server Seed: {algorithm.GetServerSeed()}\nClient Seed: {algorithm.GetClientSeed()}\nNonce: {algorithm.GetNonce()-1:F0}\nDice Result: {diceRoll:F2}");
     }
     
@@ -69,6 +68,8 @@ internal static class RunSingleSpin
 
     private static void SpinPump()
     {
-        
+        var pumpEngineer = ConfigureApplication.CreatePumpReverseEngineer();
+        (int maxPumps, double maxMultiplier) = pumpEngineer.GetMaxPumpsAndMaxMultiplier();
+        Console.WriteLine($"Server Seed: {pumpEngineer.GetAlgorithm().GetServerSeed()}\nClient Seed: {pumpEngineer.GetAlgorithm().GetClientSeed()}\nNonce: {pumpEngineer.GetAlgorithm().GetNonce()-1:F0}\nMax Pumps Possible: {maxPumps:F0}\nMax Multiplier Possible: {maxMultiplier:F8}");
     }
 }

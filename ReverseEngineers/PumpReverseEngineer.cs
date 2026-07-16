@@ -14,6 +14,11 @@ internal class PumpReverseEngineer
         _maxPumps = CalculateMaxPumps();
     }
 
+    internal ProvablyFairAlgorithm GetAlgorithm()
+    {
+        return _algorithm;
+    }
+
     private int CalculateMaxPumps()
     {
         return _difficulty switch
@@ -77,7 +82,7 @@ internal class PumpReverseEngineer
         double probabilityOfWinning = 1;
         for (double i = 0; i < minimumValue; i++)
         {
-            probabilityOfWinning *= (_maxPumps - i) / (25.0 - i);
+            probabilityOfWinning *= (_maxPumps - i - 1) / (25.0 - i);
         }
         double winningMultiplier = Math.Pow(probabilityOfWinning, -1) * Rtp;
         if (winningMultiplier < 1)

@@ -13,7 +13,10 @@ public static class ConfigureApplication
     
     private const int DefaultNumberOfPlinkoRows = 16;
     private const string DefaultPlinkoDifficulty = "expert";
+    
     private const int DefaultNumberOfMines = 3;
+
+    private const string DefaultPumpDifficulty = "hard";
     
     internal static ProvablyFairAlgorithm CreateAlgorithm()
     {
@@ -109,6 +112,16 @@ public static class ConfigureApplication
         return new MinesReverseEngineer(
             algorithm: algorithm,
             numberOfMines: numberOfMines
+        );
+    }
+
+    internal static PumpReverseEngineer CreatePumpReverseEngineer()
+    {
+        string pumpDifficulty =  ConfigurationManager.AppSettings["PumpDifficulty"] ?? DefaultPumpDifficulty;
+        var algorithm = CreateAlgorithm();
+        return new PumpReverseEngineer(
+            algorithm: algorithm,
+            difficulty: pumpDifficulty
         );
     }
 }
