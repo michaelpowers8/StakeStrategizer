@@ -15,6 +15,11 @@ internal class MinesReverseEngineer
         _numberOfMines = numberOfMines;
     }
 
+    internal ProvablyFairAlgorithm GetAlgorithm()
+    {
+        return _algorithm;
+    }
+
     private List<double> GetResultNumbers()
     {
         var multipliers = new List<double>();
