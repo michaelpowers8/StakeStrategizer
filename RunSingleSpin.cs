@@ -89,7 +89,6 @@ internal static class RunSingleSpin
 
     private static void SpinKeno()
     {
-        
         var kenoEngineer = ConfigureApplication.CreateKenoReverseEngineer();
         var winningCases = kenoEngineer.GetWinningCases();
         var payoutMultiplier = kenoEngineer.GetPayoutMultiplier(winningCases);
