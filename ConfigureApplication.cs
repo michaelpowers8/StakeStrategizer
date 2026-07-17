@@ -124,4 +124,16 @@ public static class ConfigureApplication
             difficulty: pumpDifficulty
         );
     }
+
+    internal static BlackjackReverseEngineer CreateBlackjackReverseEngineer()
+    {
+        var algorithm = CreateAlgorithm();
+        return new BlackjackReverseEngineer(algorithm: algorithm);
+    }
+
+    internal static KenoReverseEngineer CreateKenoReverseEngineer()
+    {
+        var algorithm = CreateAlgorithm();
+        return new KenoReverseEngineer(algorithm);
+    }
 }

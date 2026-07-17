@@ -11,6 +11,11 @@ internal class KenoReverseEngineer
         _algorithm = algorithm;
     }
 
+    internal ProvablyFairAlgorithm GetAlgorithm()
+    {
+        return _algorithm;
+    }
+    
     private List<double> GetResultNumbers()
     {
         var multipliers = new List<double>();

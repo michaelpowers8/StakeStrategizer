@@ -21,6 +21,12 @@ internal static class RunSingleSpin
             case "pump":
                 SpinPump();
                 break;
+            case "blackjack":
+                SpinBlackjack();
+                break;
+            case "keno":
+                SpinKeno();
+                break;
             default:
                 SpinPlinko();
                 break;
@@ -71,5 +77,19 @@ internal static class RunSingleSpin
         var pumpEngineer = ConfigureApplication.CreatePumpReverseEngineer();
         (int maxPumps, double maxMultiplier) = pumpEngineer.GetMaxPumpsAndMaxMultiplier();
         Console.WriteLine($"Server Seed: {pumpEngineer.GetAlgorithm().GetServerSeed()}\nClient Seed: {pumpEngineer.GetAlgorithm().GetClientSeed()}\nNonce: {pumpEngineer.GetAlgorithm().GetNonce()-1:F0}\nMax Pumps Possible: {maxPumps:F0}\nMax Multiplier Possible: {maxMultiplier:F8}");
+    }
+
+    private static void SpinBlackjack()
+    {
+        var blackjackEngineer = ConfigureApplication.CreateBlackjackReverseEngineer();
+        var deck = blackjackEngineer.GetDeckHand();
+        Console.WriteLine($"Server Seed: {blackjackEngineer.GetAlgorithm().GetServerSeed()}\nClient Seed: {blackjackEngineer.GetAlgorithm().GetClientSeed()}\nNonce: {blackjackEngineer.GetAlgorithm().GetNonce()-1:F0}\nBlackjack Deck (1st & 2nd cards create player hand. 3rd and 4th cards create dealer hand):\n{string.Join("|", deck)}");
+    }
+
+    private static void SpinKeno()
+    {
+        var kenoEngineer = ConfigureApplication.CreateKenoReverseEngineer();
+        var winningCases = kenoEngineer.GetWinningCases();
+        Console.WriteLine($"Server Seed: {kenoEngineer.GetAlgorithm().GetServerSeed()}\nClient Seed: {kenoEngineer.GetAlgorithm().GetClientSeed()}\nNonce: {kenoEngineer.GetAlgorithm().GetNonce() - 1:F0}\nWinning Cases: {string.Join("|", winningCases)}");
     }
 }

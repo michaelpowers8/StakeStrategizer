@@ -66,6 +66,11 @@ internal class BlackjackReverseEngineer
         _algorithm = algorithm;
     }
 
+    internal ProvablyFairAlgorithm GetAlgorithm()
+    {
+        return _algorithm;
+    }
+
     private List<double> GetResultNumbers()
     {
         return _algorithm.RandomStakeNumbers(Enumerable.Repeat(BytesToNumberMultiplier, 52).ToList());
