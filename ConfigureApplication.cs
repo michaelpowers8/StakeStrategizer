@@ -17,6 +17,7 @@ public static class ConfigureApplication
     private const int DefaultNumberOfMines = 3;
 
     private const string DefaultPumpDifficulty = "hard";
+    private const int DefaultNumberOfUserPumps = 1;
     
     internal static ProvablyFairAlgorithm CreateAlgorithm()
     {
@@ -101,6 +102,21 @@ public static class ConfigureApplication
             difficulty: difficulty,
             numberOfRows: numberOfRows);
     }
+    
+    internal static DiceReverseEngineer CreateDiceReverseEngineer()
+    {
+        string overUnder = ConfigurationManager.AppSettings["DiceOverUnder"] ?? DiceReverseEngineer.DefaultOverUnder; 
+        string? diceThresholdString =  ConfigurationManager.AppSettings["DiceThreshold"]; 
+        double diceThreshold = string.IsNullOrWhiteSpace(diceThresholdString)
+            ? DiceReverseEngineer.DefaultThreshold
+            : double.Parse(diceThresholdString);
+        var algorithm = CreateAlgorithm();
+        return new DiceReverseEngineer(
+            algorithm: algorithm,
+            threshold: diceThreshold,
+            overUnder: overUnder
+        );
+    }
 
     internal static MinesReverseEngineer CreateMinesReverseEngineer()
     {
@@ -117,11 +133,16 @@ public static class ConfigureApplication
 
     internal static PumpReverseEngineer CreatePumpReverseEngineer()
     {
+        string? numberOfUserPumpsString =  ConfigurationManager.AppSettings["PumpNumberOfUserPumps"]; 
+        int numberOfUserPumps = string.IsNullOrWhiteSpace(numberOfUserPumpsString)
+            ? DefaultNumberOfUserPumps
+            : int.Parse(numberOfUserPumpsString);
         string pumpDifficulty =  ConfigurationManager.AppSettings["PumpDifficulty"] ?? DefaultPumpDifficulty;
         var algorithm = CreateAlgorithm();
         return new PumpReverseEngineer(
             algorithm: algorithm,
-            difficulty: pumpDifficulty
+            difficulty: pumpDifficulty,
+            numberOfUserPumps: numberOfUserPumps
         );
     }
 

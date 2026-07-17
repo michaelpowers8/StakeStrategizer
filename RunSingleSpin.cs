@@ -1,5 +1,4 @@
 using System.Configuration;
-using ProvablyFairSimulation.ReverseEngineers;
 
 namespace ProvablyFairSimulation;
 
@@ -35,17 +34,29 @@ internal static class RunSingleSpin
 
     private static void SpinDice()
     {
-        var algorithm = ConfigureApplication.CreateAlgorithm();
-        var diceEngineer = new DiceReverseEngineer(algorithm: algorithm);
+        var diceEngineer = ConfigureApplication.CreateDiceReverseEngineer();
         var diceRoll = diceEngineer.GetDiceRoll();
-        Console.WriteLine($"Server Seed: {algorithm.GetServerSeed()}\nClient Seed: {algorithm.GetClientSeed()}\nNonce: {algorithm.GetNonce()-1:F0}\nDice Result: {diceRoll:F2}");
+        Console.WriteLine(
+            $"Server Seed: {diceEngineer.GetAlgorithm().GetServerSeed()}\n" +
+            $"Client Seed: {diceEngineer.GetAlgorithm().GetClientSeed()}\n" +
+            $"Nonce: {diceEngineer.GetAlgorithm().GetNonce()-1:F0}\n" +
+            $"Threshold: {diceEngineer.GetThreshold():F2}\n" +
+            $"Over-Under: {diceEngineer.GetOverUnder().ToUpperInvariant()}\n" +
+            $"Dice Result: {diceRoll:F2}\n" +
+            $"Payout Multiplier: {diceEngineer.GetPayoutMultiplier(diceRoll):F2}"
+        );
     }
     
     private static void SpinPlinko()
     {
         var plinkoEngineer = ConfigureApplication.CreatePlinkoReverseEngineer();
         var plinkoRoll = plinkoEngineer.GetPayoutMultiplier();
-        Console.WriteLine($"Server Seed: {plinkoEngineer.GetAlgorithm().GetServerSeed()}\nClient Seed: {plinkoEngineer.GetAlgorithm().GetClientSeed()}\nNonce: {plinkoEngineer.GetAlgorithm().GetNonce()-1:F0}\nPlinko Result: {plinkoRoll:F2}");
+        Console.WriteLine(
+            $"Server Seed: {plinkoEngineer.GetAlgorithm().GetServerSeed()}\n" +
+            $"Client Seed: {plinkoEngineer.GetAlgorithm().GetClientSeed()}\n" +
+            $"Nonce: {plinkoEngineer.GetAlgorithm().GetNonce()-1:F0}\n" +
+            $"Plinko Result: {plinkoRoll:F2}"
+        );
     }
 
     private static void SpinMines()
@@ -65,7 +76,12 @@ internal static class RunSingleSpin
             grid[5 - mine.Item2][mine.Item1 - 1] = "💣";
         }
 
-        Console.WriteLine($"Server Seed: {minesEngineer.GetAlgorithm().GetServerSeed()}\nClient Seed: {minesEngineer.GetAlgorithm().GetClientSeed()}\nNonce: {minesEngineer.GetAlgorithm().GetNonce() - 1:F0}\nMines Grid:");
+        Console.WriteLine(
+            $"Server Seed: {minesEngineer.GetAlgorithm().GetServerSeed()}\n" +
+            $"Client Seed: {minesEngineer.GetAlgorithm().GetClientSeed()}\n" +
+            $"Nonce: {minesEngineer.GetAlgorithm().GetNonce() - 1:F0}\n" +
+            $"Mines Grid:"
+        );
         foreach (var row in grid)
         {
             Console.WriteLine($"{string.Join("|", row)}");
@@ -76,15 +92,30 @@ internal static class RunSingleSpin
     {
         var pumpEngineer = ConfigureApplication.CreatePumpReverseEngineer();
         (int maxPumps, double maxMultiplier) = pumpEngineer.GetMaxPumpsAndMaxMultiplier();
-        
-        Console.WriteLine($"Server Seed: {pumpEngineer.GetAlgorithm().GetServerSeed()}\nClient Seed: {pumpEngineer.GetAlgorithm().GetClientSeed()}\nNonce: {pumpEngineer.GetAlgorithm().GetNonce()-1:F0}\nMax Pumps Possible: {maxPumps:F0}\nMax Multiplier Possible: {maxMultiplier:F8}");
+        double payoutMultiplier = pumpEngineer.GetPayoutMultiplier(maxPumps);
+        Console.WriteLine(
+            $"Server Seed: {pumpEngineer.GetAlgorithm().GetServerSeed()}\n" +
+            $"Client Seed: {pumpEngineer.GetAlgorithm().GetClientSeed()}\n" +
+            $"Nonce: {pumpEngineer.GetAlgorithm().GetNonce()-1:F0}\n" + 
+            $"Difficulty: {pumpEngineer.GetDifficulty()}\n" + 
+            $"Max Pumps Possible: {maxPumps:F0}\n" +
+            $"Max Multiplier Possible: {maxMultiplier:F8}\n" +
+            $"Number of Pumps by User: {pumpEngineer.GetNumberOfUserPumps():F0}\n" + 
+            $"Actual Payout Multiplier: {payoutMultiplier:F8}"
+        );
     }
 
     private static void SpinBlackjack()
     {
         var blackjackEngineer = ConfigureApplication.CreateBlackjackReverseEngineer();
         var deck = blackjackEngineer.GetDeckHand();
-        Console.WriteLine($"Server Seed: {blackjackEngineer.GetAlgorithm().GetServerSeed()}\nClient Seed: {blackjackEngineer.GetAlgorithm().GetClientSeed()}\nNonce: {blackjackEngineer.GetAlgorithm().GetNonce()-1:F0}\nBlackjack Deck (1st & 2nd cards create player hand. 3rd and 4th cards create dealer hand):\n{string.Join("|", deck)}");
+        Console.WriteLine(
+            $"Server Seed: {blackjackEngineer.GetAlgorithm().GetServerSeed()}\n" +
+            $"Client Seed: {blackjackEngineer.GetAlgorithm().GetClientSeed()}\n" +
+            $"Nonce: {blackjackEngineer.GetAlgorithm().GetNonce()-1:F0}\n" +
+            $"Blackjack Deck (1st & 2nd cards create player hand. 3rd and 4th cards create dealer hand):\n" +
+            $"{string.Join("|", deck)}"
+        );
     }
 
     private static void SpinKeno()

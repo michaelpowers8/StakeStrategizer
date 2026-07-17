@@ -6,17 +6,29 @@ internal class PumpReverseEngineer
     private readonly ProvablyFairAlgorithm _algorithm;
     private readonly string _difficulty;
     private readonly int _maxPumps;
+    private readonly int _numberOfUserPumps;
 
-    internal PumpReverseEngineer(ProvablyFairAlgorithm algorithm, string difficulty)
+    internal PumpReverseEngineer(ProvablyFairAlgorithm algorithm, string difficulty, int numberOfUserPumps)
     {
         _algorithm = algorithm;
         _difficulty = difficulty;
+        _numberOfUserPumps = numberOfUserPumps;
         _maxPumps = CalculateMaxPumps();
     }
 
     internal ProvablyFairAlgorithm GetAlgorithm()
     {
         return _algorithm;
+    }
+
+    internal string GetDifficulty()
+    {
+        return _difficulty;
+    }
+
+    internal int GetNumberOfUserPumps()
+    {
+        return _numberOfUserPumps;
     }
 
     private int CalculateMaxPumps()
@@ -98,5 +110,19 @@ internal class PumpReverseEngineer
         List<int> finalShuffle = NumbersToShuffle(stakeNumbers);
         List<int> values = ShuffleToValues(finalShuffle);
         return (values.Min(), ValuesToMaxPayoutMultiplier(values));
+    }
+    
+    internal double GetPayoutMultiplier(int maxPossiblePumpsBeforeLosing)
+    {
+        List<int> payoutMultiplierPumpsValue = new List<int>();
+        if (maxPossiblePumpsBeforeLosing > _numberOfUserPumps)
+        {
+            payoutMultiplierPumpsValue.Add(_numberOfUserPumps);
+        }
+        else
+        {
+            payoutMultiplierPumpsValue.Add(0);
+        }
+        return ValuesToMaxPayoutMultiplier(payoutMultiplierPumpsValue);
     }
 }
