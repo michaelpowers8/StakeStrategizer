@@ -7,8 +7,8 @@ namespace ProvablyFairSimulation;
 internal static class RunSimulation
 {
     private const string DefaultGameToSimulate = "plinko";
-    private const double DefaultInitialBalance = 1_000;
-    private const int DefaultNumberOfSimulatedSpins = 1_000;
+    private const double DefaultInitialBalance = 10_000;
+    private const int DefaultNumberOfSimulatedSpins = 10_000;
     
     internal static void Run()
     {
