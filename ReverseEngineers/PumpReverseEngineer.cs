@@ -24,9 +24,9 @@ internal class PumpReverseEngineer
         return _difficulty switch
         {
             "easy" => 25,
-            "medium" => 22,
-            "hard" => 20,
-            "expert" => 15,
+            "medium" => 23,
+            "hard" => 21,
+            "expert" => 16,
             _ => 0
         };
     }
