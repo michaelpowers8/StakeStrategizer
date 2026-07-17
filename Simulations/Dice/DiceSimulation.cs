@@ -1,11 +1,11 @@
 using System.Text;
 using ProvablyFairSimulation.ReverseEngineers;
 
-namespace ProvablyFairSimulation.Simulations.Plinko;
+namespace ProvablyFairSimulation.Simulations.Dice;
 
-public class PlinkoSimulation
+public class DiceSimulation
 {
-    private readonly PlinkoReverseEngineer _plinkoReverseEngineer;
+    private readonly DiceReverseEngineer _diceReverseEngineer;
     private readonly BettingStrategy _bettingStrategy;
     private readonly double _initialBalance;
     private double _currentBalance;
@@ -22,9 +22,9 @@ public class PlinkoSimulation
     private double _smallestBalanceDuringSimulation;
     private long _smallestBalanceDuringSimulationNonce;
 
-    internal PlinkoSimulation()
+    internal DiceSimulation()
     {
-        _plinkoReverseEngineer = new PlinkoReverseEngineer(new ProvablyFairAlgorithm(), "expert", 16);
+        _diceReverseEngineer = new DiceReverseEngineer(new ProvablyFairAlgorithm(), "expert", 16);
         _bettingStrategy =  new BettingStrategy();
         _initialBalance = 1_000_000;
         _currentBalance = _initialBalance;
@@ -38,14 +38,14 @@ public class PlinkoSimulation
         _currentLosingStreak = 0;
         _largestBalanceDuringSimulation = _initialBalance;
         _smallestBalanceDuringSimulation = _initialBalance;
-        _largestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
-        _smallestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _largestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _smallestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
         ValidParameters();
     }
     
-    internal PlinkoSimulation(PlinkoReverseEngineer plinkoReverseEngineer)
+    internal DiceSimulation(DiceReverseEngineer diceReverseEngineer)
     {
-        _plinkoReverseEngineer = plinkoReverseEngineer;
+        _diceReverseEngineer = diceReverseEngineer;
         _bettingStrategy = new BettingStrategy();
         _initialBalance = 1_000_000;
         _currentBalance = _initialBalance;
@@ -59,14 +59,14 @@ public class PlinkoSimulation
         _currentLosingStreak = 0;
         _largestBalanceDuringSimulation = _initialBalance;
         _smallestBalanceDuringSimulation = _initialBalance;
-        _largestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
-        _smallestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _largestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _smallestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
         ValidParameters();
     }
     
-    internal PlinkoSimulation(BettingStrategy bettingStrategy)
+    internal DiceSimulation(BettingStrategy bettingStrategy)
     {
-        _plinkoReverseEngineer = new PlinkoReverseEngineer(new ProvablyFairAlgorithm(), "expert", 16);
+        _diceReverseEngineer = new DiceReverseEngineer(new ProvablyFairAlgorithm(), "expert", 16);
         _bettingStrategy = bettingStrategy;
         _initialBalance = 1_000_000;
         _currentBalance = _initialBalance;
@@ -80,14 +80,14 @@ public class PlinkoSimulation
         _currentLosingStreak = 0;
         _largestBalanceDuringSimulation = _initialBalance;
         _smallestBalanceDuringSimulation = _initialBalance;
-        _largestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
-        _smallestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _largestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _smallestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
         ValidParameters();
     }
 
-    internal PlinkoSimulation(PlinkoReverseEngineer plinkoReverseEngineer, BettingStrategy bettingStrategy)
+    internal DiceSimulation(DiceReverseEngineer diceReverseEngineer, BettingStrategy bettingStrategy)
     {
-        _plinkoReverseEngineer = plinkoReverseEngineer;
+        _diceReverseEngineer = diceReverseEngineer;
         _bettingStrategy = bettingStrategy;
         _initialBalance = 1_000_000;
         _currentBalance = _initialBalance;
@@ -101,14 +101,14 @@ public class PlinkoSimulation
         _currentLosingStreak = 0;
         _largestBalanceDuringSimulation = _initialBalance;
         _smallestBalanceDuringSimulation = _initialBalance;
-        _largestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
-        _smallestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _largestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _smallestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
         ValidParameters();
     }
     
-    internal PlinkoSimulation(PlinkoReverseEngineer plinkoReverseEngineer, BettingStrategy bettingStrategy, double initialBalance)
+    internal DiceSimulation(DiceReverseEngineer diceReverseEngineer, BettingStrategy bettingStrategy, double initialBalance)
     {
-        _plinkoReverseEngineer = plinkoReverseEngineer;
+        _diceReverseEngineer = diceReverseEngineer;
         _bettingStrategy = bettingStrategy;
         _initialBalance = initialBalance;
         _currentBalance = _initialBalance;
@@ -122,14 +122,14 @@ public class PlinkoSimulation
         _currentLosingStreak = 0;
         _largestBalanceDuringSimulation = _initialBalance;
         _smallestBalanceDuringSimulation = _initialBalance;
-        _largestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
-        _smallestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _largestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _smallestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
         ValidParameters();
     }
     
-    internal PlinkoSimulation(PlinkoReverseEngineer plinkoReverseEngineer, BettingStrategy bettingStrategy, double initialBalance, int numberOfPlays)
+    internal DiceSimulation(DiceReverseEngineer diceReverseEngineer, BettingStrategy bettingStrategy, double initialBalance, int numberOfPlays)
     {
-        _plinkoReverseEngineer = plinkoReverseEngineer;
+        _diceReverseEngineer = diceReverseEngineer;
         _bettingStrategy = bettingStrategy;
         _initialBalance = initialBalance;
         _currentBalance = _initialBalance;
@@ -143,8 +143,8 @@ public class PlinkoSimulation
         _currentLosingStreak = 0;
         _largestBalanceDuringSimulation = _initialBalance;
         _smallestBalanceDuringSimulation = _initialBalance;
-        _largestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
-        _smallestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _largestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _smallestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
         ValidParameters();
     }
 
@@ -213,12 +213,12 @@ public class PlinkoSimulation
         if (_currentBalance > _largestBalanceDuringSimulation)
         {
             _largestBalanceDuringSimulation = _currentBalance;
-            _largestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetNonce();
+            _largestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetNonce();
         }
         else if (_currentBalance < _smallestBalanceDuringSimulation)
         {
             _smallestBalanceDuringSimulation = _currentBalance;
-            _smallestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetNonce();
+            _smallestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetNonce();
         }
     }
 
@@ -226,14 +226,14 @@ public class PlinkoSimulation
     {
         string equalsSeparatorLine = new string('=', 50);
         StringBuilder reportString = new StringBuilder();
-        reportString.AppendLine("PLINKO SIMULATION REPORT");
+        reportString.AppendLine("DICE SIMULATION REPORT");
         reportString.AppendLine("");
         reportString.AppendLine(equalsSeparatorLine);
         reportString.AppendLine("GAME SETTINGS");
         reportString.AppendLine(equalsSeparatorLine);
         reportString.AppendLine("");
-        reportString.AppendLine($"Number of Rows: {_plinkoReverseEngineer.GetNumberOfRows():N0}");
-        reportString.AppendLine($"Risk Level: {_plinkoReverseEngineer.GetDifficulty()}");
+        reportString.AppendLine($"Threshold: {_diceReverseEngineer.GetThreshold():N0}");
+        reportString.AppendLine($"Over/Under: {_diceReverseEngineer.GetOverUnder()}");
         reportString.AppendLine($"Initial Balance: ${_initialBalance:N2}");
         reportString.AppendLine($"Number of Bets Initialized: {_numberOfPlays:N0}");
         reportString.AppendLine($"Base Bet Size: ${_bettingStrategy.GetBaseBetSize():N2}");
@@ -286,6 +286,7 @@ public class PlinkoSimulation
         reportString.AppendLine($"Nonce Where Largest Balance Occurred: {_largestBalanceDuringSimulationNonce:N0}");
         reportString.AppendLine($"Smallest Balance Recorded During Simulation: ${_smallestBalanceDuringSimulation:N2}");
         reportString.AppendLine($"Nonce Where Smallest Balance Occurred: {_smallestBalanceDuringSimulationNonce:N0}");
+        reportString.AppendLine($"Base Bet Size: ${_bettingStrategy.GetBaseBetSize():N2}");
         reportString.AppendLine("");
         reportString.AppendLine(equalsSeparatorLine);
         reportString.AppendLine("CONCLUSION");
@@ -315,14 +316,14 @@ public class PlinkoSimulation
     {
         Dictionary<string, object> jsonReport = new Dictionary<string, object>()
         {
-            ["gameSimulated"] = "Plinko",
-            ["serverSeed"] = _plinkoReverseEngineer.GetAlgorithm().GetServerSeed(),
-            ["serverSeedHashed"] = _plinkoReverseEngineer.GetAlgorithm().GetServerSeedHash(),
-            ["clientSeed"] = _plinkoReverseEngineer.GetAlgorithm().GetClientSeed(),
-            ["startingNonce"] = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce(),
-            ["endingNonce"] = _plinkoReverseEngineer.GetAlgorithm().GetNonce(),
-            ["numberOfRows"] = _plinkoReverseEngineer.GetNumberOfRows(),
-            ["riskLevel"] = _plinkoReverseEngineer.GetDifficulty(),
+            ["gameSimulated"] = "Dice",
+            ["serverSeed"] = _diceReverseEngineer.GetAlgorithm().GetServerSeed(),
+            ["serverSeedHashed"] = _diceReverseEngineer.GetAlgorithm().GetServerSeedHash(),
+            ["clientSeed"] = _diceReverseEngineer.GetAlgorithm().GetClientSeed(),
+            ["startingNonce"] = _diceReverseEngineer.GetAlgorithm().GetStartingNonce(),
+            ["endingNonce"] = _diceReverseEngineer.GetAlgorithm().GetNonce(),
+            ["threshold"] = _diceReverseEngineer.GetThreshold(),
+            ["overUnder"] = _diceReverseEngineer.GetOverUnder(),
             ["maximumNumberOfBetsSetForSimulation"] = _numberOfPlays,
             ["numberOfBetsPlaced"] = numberOfBetsPlaced,
             ["numberOfWins"] =  _numberOfWins,
@@ -357,19 +358,20 @@ public class PlinkoSimulation
         _longestLosingStreak = 0;
         _largestBalanceDuringSimulation = _initialBalance;
         _smallestBalanceDuringSimulation = _initialBalance;
-        _largestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
-        _smallestBalanceDuringSimulationNonce = _plinkoReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _largestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
+        _smallestBalanceDuringSimulationNonce = _diceReverseEngineer.GetAlgorithm().GetStartingNonce();
         _bettingStrategy.SetCurrentBetSize(_bettingStrategy.GetBaseBetSize());
     }
     
-    internal Dictionary<string, object> RunPlinkoSimulation()
+    internal Dictionary<string, object> RunDiceSimulation()
     {
         ResetVariables();
         for (var spinNumber = 0; spinNumber < _numberOfPlays; spinNumber++)
         {
             _currentBalance -= _bettingStrategy.GetCurrentBetSize();
             _totalMoneyWagered += _bettingStrategy.GetCurrentBetSize();
-            double result = _plinkoReverseEngineer.GetPayoutMultiplier();
+            double diceRoll = _diceReverseEngineer.GetDiceRoll();
+            double result = _diceReverseEngineer.GetPayoutMultiplier(diceRoll);
             _currentBalance += _bettingStrategy.GetCurrentBetSize()*result;
             _totalMoneyWon += _bettingStrategy.GetCurrentBetSize()*result;
             if (_bettingStrategy.NetChangeReached(moneyWagered: _totalMoneyWagered, moneyWon: _totalMoneyWon))

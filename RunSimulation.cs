@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Configuration;
+using ProvablyFairSimulation.Simulations.Dice;
 using ProvablyFairSimulation.Simulations.Plinko;
 
 namespace ProvablyFairSimulation; 
@@ -15,14 +16,15 @@ internal static class RunSimulation
         Dictionary<string, object> simulationResults;
         switch (gameToSimulate.ToLowerInvariant())
         {
-            case DefaultGameToSimulate:
-                simulationResults = RunPlinkoSimulation();
+            case "dice":
+                simulationResults = RunDiceSimulation();
                 break;
             default:
                 simulationResults = RunPlinkoSimulation();
                 break;
         }
         string jsonString = JsonSerializer.Serialize(simulationResults, new JsonSerializerOptions { WriteIndented = true });
+        Console.WriteLine(simulationResults.GetValueOrDefault("writtenDetailedReport"));
         File.WriteAllText("Results.json", jsonString);
     }
     
@@ -46,5 +48,27 @@ internal static class RunSimulation
             numberOfPlays: numberOfPlays
         );
         return plinkoSimulator.RunPlinkoSimulation();
+    }
+    
+    private static Dictionary<string, object> RunDiceSimulation()
+    {
+        var initialBalanceString = ConfigurationManager.AppSettings["StartingBalance"];
+        var numberOfPlaysString = ConfigurationManager.AppSettings["NumberOfSimulatedSpins"];
+        
+        var initialBalance = string.IsNullOrWhiteSpace(initialBalanceString)
+            ? DefaultInitialBalance
+            : double.Parse(initialBalanceString);
+        
+        var numberOfPlays = string.IsNullOrWhiteSpace(numberOfPlaysString)
+            ? DefaultNumberOfSimulatedSpins
+            : int.Parse(numberOfPlaysString);
+        
+        var diceSimulator = new DiceSimulation(
+            diceReverseEngineer: ConfigureApplication.CreateDiceReverseEngineer(),
+            bettingStrategy: ConfigureApplication.CreateBettingStrategy(),
+            initialBalance: initialBalance,
+            numberOfPlays: numberOfPlays
+        );
+        return diceSimulator.RunDiceSimulation();
     }
 }

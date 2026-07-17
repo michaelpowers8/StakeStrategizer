@@ -19,7 +19,7 @@ public static class ConfigureApplication
     private const string DefaultPumpDifficulty = "hard";
     private const int DefaultNumberOfUserPumps = 1;
     
-    internal static ProvablyFairAlgorithm CreateAlgorithm()
+    private static ProvablyFairAlgorithm CreateAlgorithm()
     {
         ProvablyFairAlgorithm algorithm;
         string? serverSeed = ConfigurationManager.AppSettings["ServerSeed"];
