@@ -134,6 +134,26 @@ public static class ConfigureApplication
     internal static KenoReverseEngineer CreateKenoReverseEngineer()
     {
         var algorithm = CreateAlgorithm();
-        return new KenoReverseEngineer(algorithm);
+        string? difficulty =  ConfigurationManager.AppSettings["KenoDifficulty"]; 
+        string? userCases = ConfigurationManager.AppSettings["KenoUserSelectedCases"];
+        int[] userCasesSplit;
+        if (!string.IsNullOrEmpty(userCases))
+        {
+            string[] userCasesSplitStrings = userCases.Split(',');
+            userCasesSplit = new int[userCasesSplitStrings.Length];
+            for (int i = 0; i < userCasesSplitStrings.Length; i++)
+            {
+                userCasesSplit[i] = Int32.Parse(userCasesSplitStrings[i]);
+            }
+        }
+        else
+        {
+            userCasesSplit = KenoReverseEngineer.DefaultUserCases;
+        }
+        return new KenoReverseEngineer(
+            algorithm, 
+            difficulty ?? KenoReverseEngineer.DefaultDifficulty, 
+            userCasesSplit
+        );
     }
 }

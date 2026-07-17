@@ -76,6 +76,7 @@ internal static class RunSingleSpin
     {
         var pumpEngineer = ConfigureApplication.CreatePumpReverseEngineer();
         (int maxPumps, double maxMultiplier) = pumpEngineer.GetMaxPumpsAndMaxMultiplier();
+        
         Console.WriteLine($"Server Seed: {pumpEngineer.GetAlgorithm().GetServerSeed()}\nClient Seed: {pumpEngineer.GetAlgorithm().GetClientSeed()}\nNonce: {pumpEngineer.GetAlgorithm().GetNonce()-1:F0}\nMax Pumps Possible: {maxPumps:F0}\nMax Multiplier Possible: {maxMultiplier:F8}");
     }
 
@@ -88,8 +89,17 @@ internal static class RunSingleSpin
 
     private static void SpinKeno()
     {
+        
         var kenoEngineer = ConfigureApplication.CreateKenoReverseEngineer();
         var winningCases = kenoEngineer.GetWinningCases();
-        Console.WriteLine($"Server Seed: {kenoEngineer.GetAlgorithm().GetServerSeed()}\nClient Seed: {kenoEngineer.GetAlgorithm().GetClientSeed()}\nNonce: {kenoEngineer.GetAlgorithm().GetNonce() - 1:F0}\nWinning Cases: {string.Join("|", winningCases)}");
+        var payoutMultiplier = kenoEngineer.GetPayoutMultiplier(winningCases);
+        Console.WriteLine(
+            $"Server Seed: {kenoEngineer.GetAlgorithm().GetServerSeed()}\n" +
+            $"Client Seed: {kenoEngineer.GetAlgorithm().GetClientSeed()}\n" +
+            $"Nonce: {kenoEngineer.GetAlgorithm().GetNonce() - 1:F0}\n" +
+            $"Difficulty: {kenoEngineer.GetDifficulty().ToUpper()}\n" +
+            $"User Cases: {string.Join("|",kenoEngineer.GetUserCases())}\n" +
+            $"Winning Cases: {string.Join("|", winningCases)}\n" +
+            $"Payout Multiplier: {payoutMultiplier:F2}");
     }
 }
