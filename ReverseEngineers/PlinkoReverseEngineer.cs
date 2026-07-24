@@ -75,10 +75,10 @@ public class PlinkoReverseEngineer
 
     private void ContainsValidParameters()
     {
-        List<string> validDifficulties = new List<string>() { "low", "medium", "high", "expert" };
+        List<string> validDifficulties = new List<string>() { "low", "medium", "high", "expert", "degenerate" };
         if (!validDifficulties.Contains(_difficulty))
         {
-            throw new ArgumentException("Difficulty must be low, medium, high, expert");
+            throw new ArgumentException("Difficulty must be low, medium, high, expert, degenerate");
         }
 
         if (_numberOfRows < MinimumNumberOfRows || _numberOfRows > MaximumNumberOfRows)

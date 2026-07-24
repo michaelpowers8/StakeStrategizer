@@ -109,12 +109,14 @@ internal static class RunSingleSpin
     {
         var blackjackEngineer = ConfigureApplication.CreateBlackjackReverseEngineer();
         var deck = blackjackEngineer.GetDeckHand();
+        var payoutMultiplier = blackjackEngineer.MaxPayoutMultiplierWithPerfectPlay(deck.GetRange(0, deck.Count));
         Console.WriteLine(
             $"Server Seed: {blackjackEngineer.GetAlgorithm().GetServerSeed()}\n" +
             $"Client Seed: {blackjackEngineer.GetAlgorithm().GetClientSeed()}\n" +
             $"Nonce: {blackjackEngineer.GetAlgorithm().GetNonce()-1:F0}\n" +
+            $"Best Payout Multiplier Possible: {payoutMultiplier}\n" +
             $"Blackjack Deck (1st & 2nd cards create player hand. 3rd and 4th cards create dealer hand):\n" +
-            $"{string.Join("|", deck)}"
+            $"{string.Join("|", deck)}\n"
         );
     }
 

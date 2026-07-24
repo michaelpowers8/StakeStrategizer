@@ -2,7 +2,11 @@ namespace ProvablyFairSimulation.ReverseEngineers;
 
 internal class BlackjackReverseEngineer
 {
+    private const int BlackJackValue = 21;
+    private const int InitialNumberOfCardsDealtPerPlayer = 2;
+    private const int MaximumPossibleHits = BlackJackValue - InitialNumberOfCardsDealtPerPlayer;
     private const double BytesToNumberMultiplier = 52;
+    private const int NumberOfCardsInDeck = 128;
     private readonly ProvablyFairAlgorithm _algorithm;
 
     private static readonly IReadOnlyDictionary<int, string> PlayingCards = new Dictionary<int, string>
@@ -73,7 +77,7 @@ internal class BlackjackReverseEngineer
 
     private List<double> GetResultNumbers()
     {
-        return _algorithm.RandomStakeNumbers(Enumerable.Repeat(BytesToNumberMultiplier, 52).ToList());
+        return _algorithm.RandomStakeNumbers(Enumerable.Repeat(BytesToNumberMultiplier, NumberOfCardsInDeck).ToList());
     }
 
     private List<string> NumbersToDeck(List<double> numbers)
@@ -92,5 +96,152 @@ internal class BlackjackReverseEngineer
         List<double> stakeNumbers = GetResultNumbers();
         List<string> finalDeck = NumbersToDeck(stakeNumbers);
         return finalDeck;
+    }
+
+    internal double MaxPayoutMultiplierWithPerfectPlay(List<string>? deck = null)
+    {
+        deck ??= GetDeckHand();
+        var playerHand = deck.GetRange(0, InitialNumberOfCardsDealtPerPlayer);
+        deck.RemoveRange(0, InitialNumberOfCardsDealtPerPlayer);
+        var playerHandValue = GetHandValue(playerHand);
+        var dealerHand = deck.GetRange(0, InitialNumberOfCardsDealtPerPlayer);
+        deck.RemoveRange(0, InitialNumberOfCardsDealtPerPlayer);
+        var dealerHandValue = GetHandValue(dealerHand);
+        if (playerHandValue == BlackJackValue && dealerHandValue < BlackJackValue)
+        {
+            return 2.5;
+        }
+        if (dealerHandValue == BlackJackValue && playerHandValue < BlackJackValue && dealerHand.First().Last().Equals('A'))
+        {
+            return 2.0/3.0;
+        }
+        if (dealerHandValue == BlackJackValue && playerHandValue < BlackJackValue && !dealerHand.First().Last().Equals('A'))
+        {
+            return 0;
+        }
+        if (dealerHandValue == BlackJackValue && playerHandValue == BlackJackValue)
+        {
+            return 1;
+        }
+
+        return SimulateAllBlackjackHands(playerHand, dealerHand, deck);
+    }
+
+    private static double SimulateAllBlackjackHands(
+        List<string> playerHand,
+        List<string> dealerHand,
+        List<string> deck
+    )
+    {
+        List<double> payoutMultipliers = new List<double>();
+        for (int numberOfHits = 0; numberOfHits < MaximumPossibleHits; numberOfHits++)
+        {
+            int playerHandValue = GetPlayerHandValue(
+                playerHand:playerHand.GetRange(index:0, count:playerHand.Count), 
+                restOfDeck: deck.GetRange(index:0, count:deck.Count), 
+                numberOfHits:numberOfHits
+            );
+            int dealerHandValue = GetDealerHandValue(
+                dealerHand:dealerHand.GetRange(index:0, count:dealerHand.Count), 
+                restOfDeck:deck.GetRange(
+                    index: numberOfHits, 
+                    count: deck.Count - numberOfHits
+                )
+            );
+            if (
+                (
+                    (playerHandValue > dealerHandValue || dealerHandValue > BlackJackValue) && 
+                    playerHandValue <= BlackJackValue && numberOfHits == 1
+                )
+                ||
+                (
+                    playerHandValue > dealerHandValue && 
+                    playerHandValue <= BlackJackValue && numberOfHits != 1
+                )
+            )
+            {
+                payoutMultipliers.Add(2);
+            }
+            else if (playerHandValue == dealerHandValue)
+            {
+                payoutMultipliers.Add(1);
+            }
+            else if (playerHandValue > BlackJackValue)
+            {
+                payoutMultipliers.Add(0);
+            }
+            else if (dealerHandValue > BlackJackValue)
+            {
+                payoutMultipliers.Add(2);
+            }
+            else if (dealerHandValue > playerHandValue)
+            {
+                payoutMultipliers.Add(0);
+            }
+            else
+            {
+                Console.WriteLine($"Player Hand Value: {playerHandValue}\nDealer Hand Value: {dealerHandValue}");
+            }
+        }
+        return payoutMultipliers.Max();
+    }
+    
+    private static int GetHandValue(List<string> hand)
+    {
+        int numberOfAces = 0;
+        int handValue = 0;
+        foreach (var card in hand)
+        {
+            var cardValueString = card.Substring(1, card.Length - 1);
+            if (Int32.TryParse(cardValueString, out int cardValue))
+            {
+                handValue += cardValue;
+            }
+            else if (!cardValueString.Equals("A"))
+            {
+                handValue += 10;
+            }
+            else
+            {
+                numberOfAces++;
+            }
+        }
+        
+        if (numberOfAces == 0)
+        {
+            return handValue;
+        }
+        handValue += numberOfAces - 1;
+        if (handValue + 11 > BlackJackValue)
+        {
+            handValue++;
+        }
+        else
+        {
+            handValue += 11;
+        }
+        return handValue;
+    }
+
+    private static int GetPlayerHandValue(List<string> playerHand, List<string> restOfDeck, int numberOfHits)
+    {
+        playerHand.AddRange(restOfDeck.GetRange(0, numberOfHits));
+        return GetHandValue(playerHand);
+    }
+
+    private static int GetDealerHandValue(List<string> dealerHand, List<string> restOfDeck)
+    {
+        int handValue = GetHandValue(dealerHand);
+        int index = 0;
+        while (true)
+        {
+            if (handValue >= 17)
+            {
+                return handValue;
+            }
+            dealerHand.Add(restOfDeck[index]);
+            handValue = GetHandValue(dealerHand);
+            index++;
+        }
     }
 }
